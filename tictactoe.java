@@ -1,47 +1,43 @@
 import java.util.Scanner;
-/**
- * Tic-Tac-Toe: Two-player, console-based, non-graphics, non-OO version.
- * All variables/methods are declared as static (i.e., class)
- *  in this non-OO version.
- */
-public class p120 {
-   // Define named constants for:
-   //  1. Player: using CROSS and NOUGHT
-   //  2. Cell contents: using CROSS, NOUGHT and NO_SEED
+
+public class TTTConsoleNonOO {
+   // Definim les següents variables
+   // 1. Jugador: utilitzant CROSS i NUGHT
+	// 2. Contingut de la cel·la: utilitzant CROSS, NUGHT i NO_SEED
    public static final int CROSS   = 0;
    public static final int NOUGHT  = 1;
    public static final int NO_SEED = 2;
 
-   // The game board
-   public static final int ROWS = 3, COLS = 3;  // number of rows/columns
-   public static int[][] board = new int[ROWS][COLS]; // EMPTY, CROSS, NOUGHT
+   // El tauler de joc
+   public static final int ROWS = 3, COLS = 3; // nombre de files/columnes
+   public static int[][] board = new int[ROWS][COLS]; // Buit, Creu, Cercle
 
-   // The current player
-   public static int currentPlayer;  // CROSS, NOUGHT
+   // El jugador actual
+   public static int currentPlayer;  // CREU, RES
 
-   // Define named constants to represent the various states of the game
+   // Definir constants anomenades per representar els diferents estats del joc
    public static final int PLAYING    = 0;
    public static final int DRAW       = 1;
    public static final int CROSS_WON  = 2;
    public static final int NOUGHT_WON = 3;
-   // The current state of the game
+   // L'estat actual del joc
    public static int currentState;
 
-   public static Scanner in = new Scanner(System.in); // the input Scanner
+   public static Scanner in = new Scanner(System.in); // l'escàner d'entrada
 
-   /** The entry main method (the program starts here) */
+   /** El mètode principal d'entrada (el programa comença aquí) */
    public static void main(String[] args) {
-      // Initialize the board, currentState and currentPlayer
+	  // Inicialitzar el tauler, currentState i currentPlayer
       initGame();
 
-      // Play the game once
+      // Juga el joc una vegada
       do {
-         // currentPlayer makes a move
-         // Update board[selectedRow][selectedCol] and currentState
+    	 // currentPlayer fa un moviment
+    	 // Actualitza el tauler [selectedRow][selectedCol] i currentState
          stepGame();
-         // Refresh the display
+         // Actualitza la pantalla
          paintBoard();
-         // Print message if game over
+         // Imprimeix el missatge si el joc acaba
          if (currentState == CROSS_WON) {
             System.out.println("'X' won!\nBye!");
          } else if (currentState == NOUGHT_WON) {
@@ -49,109 +45,109 @@ public class p120 {
          } else if (currentState == DRAW) {
             System.out.println("It's a Draw!\nBye!");
          }
-         // Switch currentPlayer
+         // Canvia el jugador actual
          currentPlayer = (currentPlayer == CROSS) ? NOUGHT : CROSS;
-      } while (currentState == PLAYING); // repeat if not game over
+      } while (currentState == PLAYING); // repeteix si no s'ha acabat el joc
    }
 
-   /** Initialize the board[][], currentState and currentPlayer for a new game*/
+   /** Inicialitzar el board[][], currentState i currentPlayer per a un joc nou*/
    public static void initGame() {
       for (int row = 0; row < ROWS; ++row) {
          for (int col = 0; col < COLS; ++col) {
-            board[row][col] = NO_SEED;  // all cells empty
+            board[row][col] = NO_SEED;  // totes les cel·les buides
          }
       }
-      currentPlayer = CROSS;   // cross plays first
-      currentState  = PLAYING; // ready to play
+      currentPlayer = CROSS;   // juga en creu primer
+      currentState  = PLAYING; // preparat per jugar
    }
 
-   /** The currentPlayer makes one move (one step).
-       Update board[selectedRow][selectedCol] and currentState. */
+   /** El jugador actual fa un moviment (un pas).
+   Actualitza el tauler [selectedRow][selectedCol] i currentState. */
    public static void stepGame() {
-      boolean validInput = false;  // for input validation
+      boolean validInput = false;  // per a la validació d'entrada
       do {
          if (currentPlayer == CROSS) {
             System.out.print("Player 'X', enter your move (row[1-3] column[1-3]): ");
          } else {
             System.out.print("Player 'O', enter your move (row[1-3] column[1-3]): ");
          }
-         int row = in.nextInt() - 1;  // array index starts at 0 instead of 1
+         int row = in.nextInt() - 1;  // L'índex de matriu comença a 0 en lloc d'1
          int col = in.nextInt() - 1;
          if (row >= 0 && row < ROWS && col >= 0 && col < COLS
                       && board[row][col] == NO_SEED) {
-            // Update board[][] and return the new game state after the move
+        	// Actualitza el board[][] i torna el nou estat del joc després del moviment
             currentState = stepGameUpdate(currentPlayer, row, col);
-            validInput = true;  // input okay, exit loop
+            validInput = true;  // entrada d'acord, sortida del bucle
          } else {
             System.out.println("This move at (" + (row + 1) + "," + (col + 1)
                   + ") is not valid. Try again...");
          }
-      } while (!validInput);  // repeat if input is invalid
+      } while (!validInput);  // repeteix si l'entrada no és vàlida
    }
 
    /**
-    * Helper function of stepGame().
-    * The given player makes a move at (selectedRow, selectedCol).
-    * Update board[selectedRow][selectedCol]. Compute and return the
-    * new game state (PLAYING, DRAW, CROSS_WON, NOUGHT_WON).
-    * @return new game state
+    * Funció d'ajuda de stepGame().
+    * El jugador donat fa un moviment a (selectedRow, selectedCol).
+    * Actualitza el tauler [selectedRow][selectedCol]. Calculeu i retorneu el
+    * nou estat del joc (PLAYING, DRAW, CROSS_WON, NOUGHT_WON).
+    * @return nou estat del joc
     */
    public static int stepGameUpdate(int player, int selectedRow, int selectedCol) {
-      // Update game board
-      board[selectedRow][selectedCol] = player;
+	      // Actualitzar el taulerde joc
+	      board[selectedRow][selectedCol] = player;
 
-      // Compute and return the new game state
-      if (board[selectedRow][0] == player       // 3-in-the-row
-                && board[selectedRow][1] == player
-                && board[selectedRow][2] == player
-             || board[0][selectedCol] == player // 3-in-the-column
-                && board[1][selectedCol] == player
-                && board[2][selectedCol] == player
-             || selectedRow == selectedCol      // 3-in-the-diagonal
-                && board[0][0] == player
-                && board[1][1] == player
-                && board[2][2] == player
-             || selectedRow + selectedCol == 2  // 3-in-the-opposite-diagonal
-                && board[0][2] == player
-                && board[1][1] == player
-                && board[2][0] == player) {
-         return (player == CROSS) ? CROSS_WON : NOUGHT_WON;
-      } else {
-         // Nobody win. Check for DRAW (all cells occupied) or PLAYING.
-         for (int row = 0; row < ROWS; ++row) {
-            for (int col = 0; col < COLS; ++col) {
-               if (board[row][col] == NO_SEED) {
-                  return PLAYING; // still have empty cells
-               }
-            }
-         }
-         return DRAW; // no empty cell, it's a draw
-      }
-   }
+	      // Calcular i tornar al nou estat del joc
+	      if (board[selectedRow][0] == player       // 3 a la fila
+	                && board[selectedRow][1] == player
+	                && board[selectedRow][2] == player
+	             || board[0][selectedCol] == player // 3 a la columna
+	                && board[1][selectedCol] == player
+	                && board[2][selectedCol] == player
+	             || selectedRow == selectedCol      // 3 a la diagonal
+	                && board[0][0] == player
+	                && board[1][1] == player
+	                && board[2][2] == player
+	             || selectedRow + selectedCol == 2  // 3 a la diagonal oposada
+	                && board[0][2] == player
+	                && board[1][1] == player
+	                && board[2][0] == player) {
+	         return (player == CROSS) ? CROSS_WON : NOUGHT_WON;
+	      } else {
+	         // Ningú ha guanyat. Comprovar si hi ha EMPAT (totes les cel·les estan ocupades) o JUGAR.
+	         for (int row = 0; row < ROWS; ++row) {
+	            for (int col = 0; col < COLS; ++col) {
+	               if (board[row][col] == NO_SEED) {
+	                  return PLAYING; // encara hi ha cel·les buides.
+	               }
+	            }
+	         }
+	         return DRAW; // no hi ha cel·les buides, és empat.
+	      }
+	   }
 
-   /** Print the game board */
-   public static void paintBoard() {
-      for (int row = 0; row < ROWS; ++row) {
-         for (int col = 0; col < COLS; ++col) {
-            paintCell(board[row][col]); // print each of the cells
-            if (col != COLS - 1) {
-               System.out.print("|");   // print vertical partition
-            }
-         }
-         System.out.println();
-         if (row != ROWS - 1) {
-            System.out.println("-----------"); // print horizontal partition
-         }
-      }
-      System.out.println();
-   }
+	   /** Es mostra  el tauler de joc */
+	   public static void paintBoard() {
+	      for (int row = 0; row < ROWS; ++row) {
+	         for (int col = 0; col < COLS; ++col) {
+	            paintCell(board[row][col]); // es mostren cada una de les cel·les.
+	            if (col != COLS - 1) {
+	               System.out.print("|");   // es mostra la partició vertical.
+	            }
+	         }
+	         System.out.println();
+	         if (row != ROWS - 1) {
+	            System.out.println("-----------"); // es mostra la partició horitzontal
+	         }
+	      }
+	      System.out.println();
+	   }
 
-   /** Print a cell having the given content */
-   public static void paintCell(int content) {
-      switch (content) {
-         case CROSS:   System.out.print(" X "); break;
-         case NOUGHT:  System.out.print(" O "); break;
-         case NO_SEED: System.out.print("   "); break;
-      }
-   }
-}
+	   /** Mostra una cel·la que te contingut a dintre */
+	   public static void paintCell(int content) {
+	      switch (content) {
+	         case CROSS:   System.out.print(" X "); break;
+	         case NOUGHT:  System.out.print(" O "); break;
+	         case NO_SEED: System.out.print("   "); break;
+	      }
+	   }
+	}
