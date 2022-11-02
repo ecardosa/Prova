@@ -1,7 +1,7 @@
 import java.util.Scanner;
 
 public class TTTConsoleNonOO {
-   // Definim les següents variables
+   // Definim les següents variables: 
    // 1. Jugador: utilitzant CROSS i NUGHT
 	// 2. Contingut de la cel·la: utilitzant CROSS, NUGHT i NO_SEED
    public static final int CROSS   = 0;
